@@ -1,7 +1,7 @@
 
 
 function spikeStruct = loadKSdir(ksDir, varargin)
-
+%SS Change to include shifted spike times
 if ~isempty(varargin)
     params = varargin{1};
 else
@@ -16,10 +16,14 @@ if ~isfield(params, 'loadPCs')
 end
 
 % load spike data
+%SS Change to include shifted spike times!
 
 spikeStruct = loadParamsPy(fullfile(ksDir, 'params.py'));
-
-ss = readNPY(fullfile(ksDir, 'spike_times.npy'));
+if ~exist(fullfile(data_dir,'spike_times_shifted.npy'),'file')
+    ss = readNPY(fullfile(ksDir, 'spike_times_shifted.npy'));
+else
+    ss = readNPY(fullfile(ksDir, 'spike_times.npy'));
+end
 st = double(ss)/spikeStruct.sample_rate;
 spikeTemplates = readNPY(fullfile(ksDir, 'spike_templates.npy')); % note: zero-indexed
 
